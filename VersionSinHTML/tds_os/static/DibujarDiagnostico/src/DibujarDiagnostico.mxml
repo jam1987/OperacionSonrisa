@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:Application xmlns:fx="http://ns.adobe.com/mxml/2009"
+			   xmlns:s="library://ns.adobe.com/flex/spark"
+			   xmlns:mx="library://ns.adobe.com/flex/mx"
+			   width="645" height="548" minWidth="955" minHeight="600" creationComplete="init()">
+	<fx:Declarations>
+		<mx:Sequence id="show"> 
+			<mx:Move xFrom="-300" xTo="10" duration="300" /> 
+		</mx:Sequence> 
+		<mx:Sequence id="hide"> 
+			<mx:Move xFrom="10" xTo="-300" duration="300" /> 
+		</mx:Sequence> 
+	</fx:Declarations>
+	<fx:Style> 
+		@namespace s "library://ns.adobe.com/flex/spark";
+		@namespace mx "library://ns.adobe.com/flex/mx";
+		
+		s|Application { 
+			backgroundGradientColors: #ffffcc, #ff99cc; 
+			backgroundGradientAlphas: 1, 1; 
+			color: #000066; 
+		} 
+		mx|MenuBar { 
+			backgroundGradientColors: #ffffcc, #ff99cc; 
+			backgroundGradientAlphas: 1, 1; 
+
+			color: #000066; 
+
+			borderThicknessLeft: 11; 
+			borderThicknessTop: 10; 
+			borderThicknessBottom: 11; 
+			borderThicknessRight: 10; 
+			cornerRadius: 10; 
+			headerHeight: 22; 
+			backgroundAlpha: 0.82; 
+
+			headerColors: #e7e7e7, #ff6699; 
+			dropShadowEnabled: true; 
+		} 
+		mx|Button { 
+			cornerRadius: 7; 
+			textIndent: 2; 
+			paddingLeft: 4; 
+			paddingRight: 4; 
+			paddingTop: 4; 
+			paddingBottom: 4; 
+
+			fontSize: 16; 
+		} 
+		mx|Panel { 
+			borderColor: #ff99cc; 
+
+			cornerRadius: 10; 
+			headerHeight: 22; 
+			backgroundAlpha: 0.82; 
+
+		}
+		global
+		{
+			chrome-color: #90C6F8;
+		} 
+	</fx:Style> 
+	<fx:Script> 
+		<![CDATA[ 
+			import mx.events.MenuEvent; 
+			import mx.events.IndexChangedEvent; 
+			import mx.graphics.codec.PNGEncoder;
+			private function init():void{        
+				setBrushSize(); 
+				setBrushPalette(); 
+			} 
+			//Set Brush 
+			private function setBrushPalette():void{ 
+				//addchild(); 
+				for( var i:int = 1 ; i<= 16 ; i += 2 ){ 
+					var bCanvas:Canvas = new Canvas(); 
+					bCanvas.name = "brush-"+i; 
+					bCanvas.width = 32; 
+					bCanvas.height = 32; 
+					bCanvas.graphics.beginFill( 0x00000000 , 1.0);    
+					bCanvas.graphics.drawCircle( 32 , 32 , i); 
+					bCanvas.graphics.endFill();    
+					BrushPalette.addChild( bCanvas ); 
+					bCanvas.addEventListener(MouseEvent.CLICK , function(event:MouseEvent):void{ 
+						var tmpArray:Array = (event.target.name).split("-"); 
+
+						hideBrushPalette(); 
+						thickness.value = tmpArray[1]; 
+						setBrushSize(); 
+					}); 
+				} 
+			} 
+			private function showBrushPalette():void{ 
+				BrushPalette.visible = true; 
+			} 
+			private function hideBrushPalette():void{ 
+				BrushPalette.visible = false; 
+			} 
+			private function setBrushSize():void{ 
+				myCanvas.graphics.clear(); 
+				myCanvas.graphics.beginFill( 0x00000000 , 1.0); 
+				myCanvas.graphics.drawCircle( myCanvas.width/2 , myCanvas.height/2 , thickness.value  );    
+				myCanvas.graphics.endFill(); 
+			} 
+			private function clearCanvas():void { 
+				canvas.graphics.clear(); 
+				canvas.graphics.beginFill(0xffffff, 0.00001);
+				canvas.graphics.drawRect(0, 0, canvas.width, canvas.height);
+				canvas.graphics.endFill();
+				setMode("modeBrush");
+				
+			} 
+			private var oldX:Number, oldY:Number; 
+			private function onMouseDown(e:MouseEvent):void { 
+				oldX = e.localX; 
+				oldY = e.localY; 
+			} 
+			private function onMouseMove(e:MouseEvent):void { 
+				if (e.buttonDown) { 
+					var g:Graphics = canvas.graphics; 
+					var mx:Number = e.localX; 
+					var my:Number = e.localY;        
+					if( mode == "modeBrush" ){ 
+
+						g.lineStyle(thickness.value, fgColor.selectedColor); 
+						g.moveTo(oldX, oldY); 
+						g.lineTo(mx, my); 
+					}else if( mode == "modeErase" ){ 
+
+						g.lineStyle(thickness.value,0xffffff); 
+						g.moveTo(oldX, oldY); 
+						g.lineTo(mx, my); 
+					}
+					oldX = mx; 
+					oldY = my;        
+				} 
+			} 
+			//On Change Event 
+			private function onChange(event:MenuEvent):void{ 
+				var m:String = event.item.@value; 
+				if (m == "file_new"){
+					clearCanvas();
+				}
+				else if(m == "file_save"){
+					var bd:BitmapData = new BitmapData(canvas.width, canvas.height);
+					bd.draw(canvas);					
+					var ba:ByteArray = (new PNGEncoder()).encode(bd);
+					(new FileReference()).save(ba, "diagnostico.png");
+				}
+				else if(m == "file_quite"){
+					
+				}
+			} 
+		
+			//
+			private var mode:String = "modeBrush"; 
+			private function setMode(m:String):void{ 
+				mode = m; 
+			}
+		]]> 
+	</fx:Script> 
+	<mx:Panel width="448" height="335" x="153.5" y="177" title="Dibujar Diagnóstico" layout="absolute"> 
+		<s:Group id="canvas" width="417" height="285" mouseMove="onMouseMove(event)" mouseDown="onMouseDown(event)" x="12" y="14">
+			
+		</s:Group>
+	</mx:Panel> 
+	<mx:Panel x="10" y="177" width="135.5" height="335" layout="absolute" title="Herramienta"> 
+		<mx:Button x="26.25" y="9" width="81" label="Dibujar" click="setMode('modeBrush')"
+				   enabled="true" labelPlacement="bottom"/> 
+		<mx:Button x="23.25" y="215" width="90" label="Borrador" click="setMode('modeErase')"/> 
+		<mx:Button x="20" y="256" label="Borrar todo" click="clearCanvas()"/>
+		
+		<mx:ColorPicker id="fgColor" x="51" y="156" width="36" height="34" selectedColor="0x000000"/> 
+		<mx:NumericStepper id="thickness" x="36.75" y="113" value="4" minimum="1" maximum="100" change="setBrushSize()"/> 
+		<mx:Canvas x="34.75" y="59" width="65" height="45" id="myCanvas" borderColor="0x000000" borderStyle="solid" /> 
+		
+	</mx:Panel> 
+	<mx:MenuBar x="10" y="138" id="menuBar" labelField="@label" width="137.5" height="32" itemClick="onChange(event)"> 
+		<mx:XMLListCollection id="menuXml"> 
+			<fx:XMLList xmlns=""> 
+				<menuitem label="Archivo" >
+					<menuitem label="Nuevo"   value="file_new" /> 
+					<menuitem label="Guardar"   value="file_save"/> 
+					<menuitem type="separator" /> 
+					<menuitem label="Salir"   value="file_quite"/> 
+				</menuitem>               
+				<menuitem label="Ayuda"> 
+					<menuitem label="¿Cómo dibujar?" value="help_howto"/> 
+				</menuitem> 
+			</fx:XMLList>    
+		</mx:XMLListCollection> 
+	</mx:MenuBar> 
+	<mx:HBox x="10" y="120" height="50" width="482" id="BrushPalette" backgroundColor="#ff80ff" showEffect="show" hideEffect="hide" visible="false"/> 
+	
+</s:Application>

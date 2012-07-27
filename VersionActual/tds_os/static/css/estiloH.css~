@@ -1,0 +1,361 @@
+/*
+Design by Free CSS Templates
+http://www.freecsstemplates.org
+Released for free under a Creative Commons Attribution 2.5 License
+*/
+
+body {
+  margin: 0 0 0 0;
+  /*background: #FFFFFF;*/
+  font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+  color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+a {
+  color: #5D0E0E;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #FF0000;
+}
+
+.image {
+  float: left;
+  margin: 0 15px 10px 0;
+}
+
+/* Header */
+
+#background {
+
+	width:1024px;
+	height:100%;
+}
+
+#logo {
+
+	width:400px;
+	height:76px;
+	background:url(../imagenes/Ope_Sonrisa.png);
+	margin-left: 400px;
+	margin-top: 50px;
+
+
+}
+
+#reportes {
+
+	width:259px;
+	height:326px;
+	background:url(../imagenes/Reportes.png);
+	position: fixed;
+	top: 5%;
+	left: 30%;
+	margin-top: 120px;
+	margin-left: -110px;
+
+
+}
+
+#barra {
+
+	width:847px;
+	height:13px;
+	background:url(../imagenes/barra.png);
+	margin-left: 200px;
+	margin-top: 0px;
+
+
+}
+
+#menu {
+
+	width: 81px;
+	height: 125px;
+	margin-left:100px;
+	margin-top:30px;
+	float: left;
+
+}
+
+img.menu {
+
+	width:80px;
+	height:34px;
+
+}
+
+.forgetpass:hover {
+
+	color:#000066;
+
+}
+
+form.datos {
+
+	margin-left: 20px;
+	font-family: Calibri, Helvetica;
+	font-weight: bold;
+	color:#000033;
+
+}
+
+input {
+
+	font-family: Calibri, Helvetica;
+
+}
+
+input.cb {
+
+	margin-left: 20px;
+
+}
+
+#historia {
+
+	height:100%;
+	width:484px;
+	margin-left: 50px;
+	margin-top: 20px;
+	float:left;
+
+}
+
+#hist-header {
+
+	background-image:url(../imagenes/hist-header.png);
+	height: 75px;
+	width: 484px;
+
+}
+
+#hist-content {
+
+	background-image:url(../imagenes/hist-line.png);
+	width: 484px;
+	min-height: 1px;
+	margin-top: 0px;
+	background-repeat:repeat-y;
+
+}
+
+#hist-footer {
+
+	background-image:url(../imagenes/hist-footes.png);
+	width: 484px;
+	height: 47px;
+}
+
+#form-transporte {
+
+	border-width: .1em;
+	width: 650px;
+	border-style:solid;
+	border-color:#000033;
+
+}
+
+#menuhist {
+
+	width: 353px;
+	height: 34px;
+}
+
+#tabul {
+    padding: 0;
+    margin: 0;
+    padding: 5px 0;
+	padding-top: 50px;
+	margin-left: 250px;
+
+}
+#tabul li {
+    display: inline;
+    -webkit-border-radius: .3em .3em 0 0;
+    -moz-border-radius: .3em .3em 0 0;
+    border-radius: .3em .3em 0 0;
+    cursor: pointer;
+	font-weight:bold;
+	font-size: 16px;
+}
+.ntabs {
+    background: #BDC7D5;
+    margin-right: 1px;
+    font-size: 11px;
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #BDC7D5;
+    padding: 5px 3px 5px 8px;
+}
+.add {
+    padding: 5px 8px;
+}
+#addtab {
+    font-size: 16px;
+    text-decoration: none;
+    position: relative;
+    top: 2px;
+    color: #333;
+}
+#addtab:hover {
+    color: #999;
+}
+.ctab {    /* Current tab style */
+    background: #E7EDF6;
+    position: relative;
+    top: 2px;
+    border-bottom-width: 0;
+}
+.close {
+    text-decoration: none;
+    color: #999;
+    font-weight: bold;
+    font-size: 14px;
+    padding: 0 4px;
+    -webkit-border-radius: .2em;
+    -moz-border-radius: .2em;
+    border-radius: .2em;
+}
+.close:hover {
+    background: #999;
+    color: #333;
+}
+#tabcontent {
+    border: 1px solid #BDC7D5;
+    background: #E7EDF6;
+    padding: 10px;
+    text-align: center;
+    font-weight: bold;
+    color:#000033;
+    font-size:13pt;
+    text-align:left;
+	width: 700px;
+	margin-left: 250px;
+}
+
+#tabcontent form {
+
+	font-size: 15px;
+	text-align:left;
+	margin-left: 10px;
+	margin-top: 20px;
+	font-family: Calibri, Helvetica;
+	font-weight: bold;
+	color:#000033;
+
+}
+
+#tabcontent input {
+
+	margin-top:5px;
+
+}
+
+#info_jornada{
+
+font-size:13pt;
+text-align:left;
+}
+
+#tabcontent h1{
+font-size:15pt;
+color:#F06;
+border-bottom: 1px dotted #BDC7D5;
+margin-bottom:15px;
+}
+
+#tabcontent a{
+
+font-size:9pt;
+color:#2b8cbe;
+
+}
+
+.mensaje_alerta{
+color:#800000;
+
+}
+
+#link_derecho{
+  float:right;
+  text-align:right;
+}
+
+img.diagn {
+
+	margin-top: 5px;
+	height: 60px;
+	wieght: 60px;
+
+}
+
+label.diagn {
+
+	margin-bottom: 15%;
+	display:inline;
+
+}
+
+#modalinfodiv,#datospac {
+
+	font-size: 15px;
+	text-align:left;
+	margin-left: 10px;
+	margin-top: 20px;
+	font-family: Calibri, Helvetica;
+	font-weight: bold;
+	color:#000033;
+	background: #E7EDF6;
+
+}
+
+#okbutton {
+
+	margin-left: 180px;
+
+}
+
+.small{
+ 
+  font-size:9pt;
+}
+
+
+.lista_flow{
+  
+  height:500px;
+  overflow:scroll;
+  
+  
+}
+
+
+
+/*                     TABLA   CSS                          */
+caption {font-size: 0.8em; color: #2b8cbe; text-align: left; margin-bottom:5px;}
+table {margin: 0; padding: 0; border-collapse: collapse; width: 100%; border-left: 1px dotted #BDC7D5; border-right: 1px dotted #BDC7D5;}
+td, th {padding: 10px 4px; border-bottom: 1px solid #EEE;}
+td + td {border-left: 1px solid #FAFAFA; color: #999;}
+td + td + td {color: #666; border-left: none;}
+td a {color: #444; text-decoration: none; text-align: right;}
+td a, th a {display: block; width: 100%;}
+td a:hover {background: #444; color: #FFF;}
+tfoot th {text-align: right;}
+th {text-align: left;}
+th + th {text-align: left;}
+th + th + th {text-align: left;}
+th a {color: #F06; text-decoration: none; font-size: 1.1em;}
+th a:visited {color: #4eb3d3;}
+th a:hover {color: #2b8cbe; text-decoration: underline;}
+thead tr, tfoot tr {color: #555; font-size: 0.8em;}
+tr {font: 12px sans-serif; background: #F8F8F8; color: #666;}
+tr:hover {background: #FFF;}
+/*                     TABLA   CSS                          */

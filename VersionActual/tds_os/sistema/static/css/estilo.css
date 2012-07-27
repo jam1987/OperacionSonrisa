@@ -1,0 +1,115 @@
+body {
+  margin: 0 0 0 0;
+  /*background: #FFFFFF;*/
+  font: normal small "Trebuchet MS", Arial, Helvetica, sans-serif;
+  color: #666666;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0;
+  padding: 0;
+  text-transform: uppercase;
+}
+
+a {
+  color: #5D0E0E;
+}
+
+a:hover {
+  text-decoration: none;
+  color: #FF0000;
+}
+
+.image {
+  float: left;
+  margin: 0 15px 10px 0;
+}
+
+/* Header */
+
+#background {
+
+	width:1024px;
+	height:640px;
+	background-image:url(../imagenes/background.png);
+}
+
+#logo {
+
+	width:400px;
+	height:76px;
+	background:url(../imagenes/Ope_Sonrisa.png);
+	position:fixed;
+	margin-top:-200px;
+	margin-left:-180px;
+	top: 50%;
+	left: 50%;
+
+}
+
+#box {
+
+	background:url(../imagenes/loginbox2.png);
+	width: 338px;
+	height: 283px;
+	margin-top: -120px;
+	margin-left: -150px;
+	position:fixed;
+	top: 50%;
+	left: 50%;
+}
+
+a.forgetpass {
+
+	font-family: Calibri, Verdana;
+	color:#FFFFFF;
+	position:absolute;
+	margin-top:50px;
+	left: 3%;
+
+}
+
+.forgetpass:hover {
+
+	color:#000066;
+
+}
+
+form.login {
+
+	color:#FFFFFF;
+	font-family: Calibri, Verdana;
+	font-size:14px;
+	margin-top: 80px;
+	margin-left: 80px;
+
+}
+
+input {
+
+	border-color:#000099;
+	border-width: 1px;
+
+}
+
+input.loginb {
+
+	margin-left: 65px;
+	margin-top: 20px;
+	-webkit-border-radius: .2em;
+    -moz-border-radius: .2em;
+    border-radius: .2em;
+
+}
+
+#mensaje_error{
+    color:white;
+    font-style:bold;
+    width:200px;
+    height:10px;
+    margin-top:10px;
+    position:absolute;
+    font-size:10pt;
+    top: 10%;
+    left: 24%;
+    }

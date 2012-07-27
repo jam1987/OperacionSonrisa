@@ -1,0 +1,137 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Operación Sonrisa</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/estiloH.css" />
+<script src="{{ STATIC_URL }}js/jquery-1.7.1.js"></script>
+<script src="{{ STATIC_URL }}ui/js/jquery-ui-1.8.18.custom.min.js"></script>
+<link type="text/css" href="{{ STATIC_URL }}ui/css/ui-lightness/jquery-ui-1.8.18.custom.css" rel="stylesheet" />
+<script type="text/javascript" src="{{ STATIC_URL }}js/ddsmoothmenu.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ddsmoothmenu.css" />
+
+<script type="text/javascript">
+
+
+$(document).ready(function(){
+    $.ajaxPrefilter(function(options, originalOptions, jqXHR) {
+        if(!options.crossDomain) {
+            if(options.data) {
+                options.data += "&";
+            } else {
+                options.data = "";
+            }
+            options.data += "csrfmiddlewaretoken={{csrf_token}}";
+        }
+    });
+
+
+
+    items = [];
+    $.getJSON('/sistema/autocomplete_j', function(data) {
+
+
+
+      $.each(data, function(key, val) {
+        items.push(val);
+      });
+          $("#jornada_codigo").autocomplete({
+        source: items
+    });
+
+    });
+
+
+
+ddsmoothmenu.init({
+	mainmenuid: "smoothmenu1", //menu DIV id
+	orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu', //class added to menu's outer DIV
+	//customtheme: ["#1c5a80", "#18374a"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+});
+</script>
+
+
+
+</head>
+<body>
+<div id="background">
+  <div id="logo">
+  </div>
+  <div id="barra">
+  </div>
+<div id="smoothmenu1" class="ddsmoothmenu">
+<ul>
+<li><a href="#">Historia</a>
+  <ul>
+  <li><a href="/sistema/crearHistoria">Crear Historia</a></li>
+  <li><a href="/sistema/historia">Modificar Historia</a></li>
+  <li><a href="/sistema/historia">Consultar Historia</a></li>
+  </ul>
+</li>
+<li><a href="#">Reportes</a>
+  <ul>
+  <li><a href="#">Sub Item 1.1</a></li>
+  <li><a href="#">Sub Item 1.2</a></li>
+  <li><a href="#">Sub Item 1.3</a></li>
+  </ul>
+</li>
+<li><a href="#">Jornadas</a>
+  <ul>
+  <li><a href="/sistema/crearJornada">Crear Jornadas</a></li>
+  <li><a href="/sistema/jornada"     >Consultar Jornadas</a></li>
+  </ul>
+</li>
+<li><a href="/sistema/opciones">Opciones</a></li>
+<li><a href="#">Ayuda</a></li>
+</ul>
+<br style="clear: left" />
+</div>
+  <ul id="tabul">
+  </ul>
+  <div id="tabcontent" >
+      <h1>BÚSQUEDA JORNADA</h1>
+      <p>Ingrese el código de jornada a buscar<p>
+        <form location='/sistema/jornadaB' method='POST' id='contactform'>
+        {% csrf_token %}
+        <div><label>Nro de Jornada:</label></div>
+        <div><input type='text' id='jornada_codigo' name='jornada_codigo' size='35'/></div>
+        <p>
+        <input type='submit' name='buscarH' value='Buscar' />
+        </p>
+        <input type='hidden' id='centinela' name='centinela' value='jornada' size='35'/>
+        </form>
+    <div id="busquedaJornada">
+        {% if busquedaJ %}
+              {% if lista_jornada %}
+                <table>
+                    <caption>Jornadas</caption>
+                    <thead>
+                        <tr>
+                            <th scope="col">Código Jornada</th>
+                            <th scope="col">Nombre</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for jornada in lista_jornada %}
+                        <tr>
+                            <th><a href="/sistema/jornada/{{ jornada.codigo }}/">{{ jornada.codigo }}</a></th>
+                            <td>{{ jornada.name }}</td>
+                        </tr>
+                     {% endfor %}
+                    </tbody>
+                </table>
+              {% else %}
+                    <span class="mensaje_alerta"> No hay Jornadas disponibles </span>
+              {% endif %}
+        {% endif %}
+    </div>
+
+  </div>
+<br />
+<br />
+</div>
+</body>
+</html>

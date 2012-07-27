@@ -1,0 +1,468 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<title>Operación Sonrisa</title>
+<meta http-equiv="content-type" content="text/html; charset=utf-8" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/estiloH.css" />
+
+
+<script type="text/javascript" src="{{ STATIC_URL }}js/ddsmoothmenu.js"></script>
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ddsmoothmenu.css" />
+<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/ddsmoothmenu-v.css" />
+
+
+<link rel="stylesheet" href="{{ STATIC_URL }}dhtmlmodal/windowfiles/dhtmlwindow.css" type="text/css" />
+<script type="text/javascript" src="{{ STATIC_URL }}dhtmlmodal/windowfiles/dhtmlwindow.js"></script>
+<link rel="stylesheet" href="{{ STATIC_URL }}dhtmlmodal/modalfiles/modal.css" type="text/css" />
+<script type="text/javascript" src="{{ STATIC_URL }}dhtmlmodal/modalfiles/modal.js"></script>
+<script src="{{ STATIC_URL }}js/jquery-1.7.1.js"></script>
+
+
+<script type="text/javascript">
+
+ddsmoothmenu.init({
+	mainmenuid: "smoothmenu1", //menu DIV id
+	orientation: 'h', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu', //class added to menu's outer DIV
+	//customtheme: ["#1c5a80", "#18374a"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+
+ddsmoothmenu.init({
+	mainmenuid: "smoothmenu2", //Menu DIV id
+	orientation: 'v', //Horizontal or vertical menu: Set to "h" or "v"
+	classname: 'ddsmoothmenu-v', //class added to menu's outer DIV
+	//customtheme: ["#804000", "#482400"],
+	contentsource: "markup" //"markup" or ["container_id", "path_to_menu_file"]
+})
+
+</script>
+<script type="text/javascript">
+
+function insertdatosprompt(){
+	postinfo=dhtmlmodal.open('agebox', 'div', 'modalinfodiv', 'Ingreso de Nueva Historia', 'width=550px,height=300px,center=1,resize=0,scrolling=0')
+}
+
+//Funcion que se ejecuta al hacer click en alguno de los botones de la ventana modal.
+function process_info(whichbutton){
+	if (whichbutton=="no")
+		alert("Usted canceló el ingreso de datos")
+	else 
+		alert("Ingreso de datos exitoso!")
+	postinfo.hide()
+}
+  
+
+</script>
+
+<script>  
+
+$(function() {
+    var total_tabs = 0;
+
+    // initialize first tab
+    addtab(1);
+	addtab(2);
+	addtab(3);
+	addtab(4);
+	addtab(5);
+
+    /*$("#addtab, #litab").click(function() {
+        total_tabs++;
+        $("#tabcontent p").hide();
+        addtab(total_tabs);
+        return false;
+    });*/
+
+    function addtab(count) {
+		
+		// Dependiendo del numero de tab se agrega un contenido diferente
+		switch (count) {
+		
+			case 1:
+				$("#tabul").append('<li id="t'+count+'" class="ntabs"> Evaluaciones &nbsp;</li>');
+        		$("#tabcontent").append("{%if esCreacion %}" +'<form name="eval1" id="c'+count+'" onsubmit="return validateEval1()" method="post" action="/sistema/crearHistoria"> '+"{%else %}" +'<form name="eval1" id="c'+count+'" onsubmit="return validateEval1()" method="post" action="{{request.path}}" > '+"{%endif %}" +''+"{% csrf_token %}"+''+"{%if esCreacion %}" +'Apellido 1ero y 2do: <input type="text" name="nombres" size="35"  /><br /> Nombre 1ero y 2do: <input type="text" name="apellidos" size="35" /><br />            # OSH: <input type="text" name="osh" size="10" value="{{codigo_j}}" disabled="disabled" /> &nbsp;# Expediente Local <input type="text" name="exp" size="10" /><br  /> '+"{%else%}" +'Apellido 1ero y 2do: <input type="text" name="nombres" size="35" value="{{paciente.nombre_completo}}" disabled="disabled" /><br /> Nombre 1ero y 2do: <input type="text" name="apellidos" size="35" disabled="disabled"/><br />            # OSH: <input type="text" name="osh" size="10" value="{{jornada.codigo}}" disabled="disabled"/> &nbsp;# Expediente Local <input type="text" name="exp" size="10" value="{{historia.nro_historia}}" disabled="disabled"/><br  />  '+"{%endif%}" +'              Acompañado por: <input type="text" name="acompanante" size="35" value="{{asiste_info.r_nombre_completo}}"/> Relacion con el paciente: <input type="text" name="relacion" size="15"/><br />            <br  />            INFORMACIÓN GENERAL DEL PACIENTE<br  />            <br  />            Dirección: <input type="text" name="dir" size="43" value="{{paciente.direccion}}"/><br />            <input type="text" name="dir2" size="51" /><br />            Ciudad: <input type="text" name="ciudad" size="14" value="{{paciente.ciudad}}"/> &nbsp; Departamento <input type="text" name="dep" size="14" /><br />            Pais: <input type="text" name="pais" size="16" /><br />            Teléfono: <input type="text" name="tlf" size="16" /> Celular: <input type="text" name="cel" size="17" /> <br />            <br />            <div id="form-transporte">            &nbsp; Distancia Recorrida: <br />            <input type="checkbox" name="apie" /> A pie <input class="cb" type="checkbox" name="burro" /> En burro/caballo <input class="cb" type="checkbox" name="bus" /> Bus <input class="cb" type="checkbox" name="Taxi" /> Taxi <input class="cb" type="checkbox" name="Bicicleta" /> Bicicleta <input type="checkbox" name="carro" /> Carro <input class="cb" type="checkbox" name="avion" /> Avión <input class="cb" type="checkbox" name="Bote" /> Bote        	</div>            <br />             Género: '+"{%if paciente.genero == 'Masculino' %}" +' <input type="radio" name="sexo" value="M" checked/>  Masculino <input type="radio" name="sexo" value="F"/> Femenino <br /> '+"{%else%}" +' <input type="radio" name="sexo" value="M" checked/>  Masculino <input type="radio" name="sexo" value="F"/> Femenino <br />  '+"{%endif%}" +'               Fecha de nacimiento: Mes: <input type="text" name="mes" size="1" maxlength=2 value="{{mes}}" /> Día: <input type="text" name="dia" size="1" maxlength=2 value="{{dia}}" /> Año: <input name="anyo" type="text" size="2" maxlength=4 value="{{ano}}"  /><br />            Edad: <input name="edad" type="text" size="1" maxlength=2 value="{{paciente.edad}}"/> <input type="radio" name="a-m" value="Anos"/> A&ntilde;os <input type="radio" name="a-m" value="Meses"/> Meses <br />            <br />            <div id="form-transporte">            Numero de Hermanos:  Vivos: <input name="vivos" type="text" size="1" maxlength=2 /> Muertos: <input name="muertos" type="text" size="1" maxlength=2 /> <br />            Miembros de la Familia con labio paladar hendido: <input class="cb" type="checkbox" name="Madre" /> Madre <input class="cb" type="checkbox" name="Padre" /> Padre <inputclass="cb" type="checkbox" name="Hermano" /> Hermano <input class="cb" type="checkbox" name="Hermana" /> Hermana            </div>            <br />            <br />            HISTORIAL DEL PACIENTE            <br />            <br />            Medicamentos que está tomando: <input type="radio" name="medic" value="N"/> Ninguno <input type="radio" name="medic" value="Antimalaria"/> Anti-malaria <input type="radio" name="medic" value="TBC"/> TBC             <input type="radio" name="medic" value="Otro"/> Otro: <input type="text" name="medicamento" size="20" maxlength=15 /> <br />      Vacunas: <input type="radio" name="vacuna" value="N"/> Ninguna <input type="radio" name="vacuna" value="Polio"/> Polio <input type="radio" name="vacuna" value="DPT"/> DPT  <input type="radio" name="vacuna" value="MMR"/> MMR            <input type="radio" name="vacuna" value="Otro"/> Otro: <input type="text" name="vacunao" size="20" maxlength=15 /> <br />      Alergias: <input type="radio" name="alergia" value="NKA"/> NKA <input type="radio" name="alergia" value="Otro"/> Otro: <input type="text" name="alergiao" size="20" maxlength=15 /> <br />        ¿Embarazada?: <input type="radio" name="embarazo" value="No"/> No <input type="radio" name="embarazo" value="si"/> Actualmente <input type="radio" name="embarazo" value="perdido"/> Perdió el bebé, Explique <input type="text" name="embarazoperd" size="20" maxlength=15 /> <br /> Infección: <input type="radio" name="infeccion" value="Ninguna"/> Ninguna <input type="radio" name="infeccion" value="IRS"/> Infección Resp Sup <input type="radio" name="infeccion" value="hepatitis"/> Hepatitis  <input type="radio" name="infeccion" value="Malaria"/> Malaria <input type="radio" name="infeccion" value="TB"/> TB <input type="radio" name="infeccion" value="Otro"/> Otro <input type="text" name="infecciono" size="15" maxlength=15 /> <br />  CNS: <input type="radio" name="cns" value="Negativo"/> Negativo <input type="radio" name="cns" value="Convulsiones"/> Convulsiones <input type="radio" name="cns" value="Otro"/> Otro <input type="text" name="cnso" size="15" maxlength=15 /> <br />  Lungs: <input type="radio" name="lungs" value="Negativo"/> Negativo <input type="radio" name="lungs" value="Otro"/> Otro <input type="text" name="lungso" size="15" maxlength=15 /> <br />  Corazón:  <input type="radio" name="corazon" value="Negativo"/> Negativo <input type="radio" name="corazon" value="Hipertension"/> Hipertensión  <input type="radio" name="corazon" value="Soplo"/> Soplo  <input type="radio" name="corazon" value="Otro"/> Otro <input type="text" name="corazono" size="15" maxlength=15 /> <br /> <br /> LABORATORIO <br /> <br /> <div id="form-transporte">  Hematocitos % <input type="text" name="hematocitos" size="20"/>  Otros Exámenes:  <input type="text" name="otrosexam" size="20"/> <br />   Hemoglobina: <input type="text" name="hemoglobina" size="20"/> </div>  '+"{%if esCreacion %}" +'<input class="sendeval1" type="submit" name="Crear" value="Crear" /> '+"{%else %}" +' <input class="sendeval1" type="submit" name="Actualizar" value="Actualizar" />   '+"{%endif %}" +'   </form>');
+				break;
+			case 2:
+				$("#tabul").append('<li id="t'+count+'" class="ntabs"> Diagnóstico y Plan Q. 1&nbsp;&nbsp;</li>');
+        		$("#tabcontent").append('<form id="c'+count+'" action="form_action.asp" method="get"> DIAGNÓSTICO DE LABIOS <br /> <br /> <input type=checkbox name="labnorm"/> 1. Labio normal <br /> <table> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/2_labio_UniInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqinc"/> 2. Izq. Unilat <br> Incompleto </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/4_labio_IzqUniCom.jpg" /> </td> <td> <input type=checkbox name="izqcom"/> <label class="diagn"> 4. Izq. Unilat <br> Completo </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/6_labio_BilIzqComDerInc.jpg" /> </td> <td> <input type=checkbox name="izqcom"/> <label class="diagn"> 6. Bilat Izq <br> completo, Der <br> incompleto </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/8_labio_BilInc.jpg" /> </td> <td> <input type=checkbox name="bilinc"/> <label class="diagn"> 8. Bilat. <br> Incompleto </label> </tr> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/3_labio_DerUniInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="deruniinc"/> 3. Der. Unilat <br> Incompleto </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/5_labio_DerUniCom.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="derunicom"/> 5. Der. Unilat <br> Completo </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/7_labio_BilDerComIzqInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="dercomizqinc"/> 7. Bilat Der <br> Completo, Izq. <br> Incompleto </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/9_labio_BilCom.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="bilcom"/> 9. Bilat <br> Completo </label> </td> </tr> <tr> <td> <a href="#" onClick="yahoowin=dhtmlwindow.open(\'yahoo\', \'iframe\', \'{{STATIC_URL}}DibujarDiagnostico/bin-release/DibujarDiagnostico.html\', \'Dibujar Otro Diagnóstico\', \'width=600px,height=500px,center=1\'); return false"><img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/otro.jpg" /></a> </td> <td> <label class="diagn" float> <input type=checkbox name="otrolab"/> 10. Otro labio</label> </td> </tr> </table> <br /> <br /> PROCEDIMIENTO DE REPARACIÓN DE LABIO (Circule únicamente el procedimiento que se realizará en esta misión) <br /> <input type="checkbox" name="ningunproc"/> Ninguno <input type="checkbox" name="labunil"/> Labio Unilateral <input type="checkbox" name="labbil"/> Labio Bilateral <input type="checkbox" name="revisioncic"/> Revisión de Cicatriz <input type="checkbox" name="otrarep"/> Otra reparación de Labio <br /> Notas de Evaluación: <input type="text" name="notasdev" size="70" /> <br /> <br /> DIAGNÓSTICO DE PALADAR <br /> <br /> <input type=checkbox name="palnorm"/> 13. Paladar normal <br /> <table> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/14_paladar_IzqUniAlvInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqunialvinc"/> 14. Izq Unilat <br> Alveolar <br> Incompleto </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/18_paladar_DerUniComFisAlv.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="derunifisalv"/> 18. Der Unilat <br> Completo con <br> Fisura Alveolar </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/22_paladar_Mucoso.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="palmuc"/> 22. Submucoso </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/26_paladar_DerUniCompDurSuav.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="derunicompdursuav"/> 26. Der Unilat <br> Completo Duro <br> y Suave </label> </td> </tr> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/15_paladar_IzqUniComFisAlv.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqunifisalv"/> 15. Izq Unilat <br> Completo con <br> Fisura Alveolar </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/19_paladar_DerComIzqInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="dercomizqinc"/> 19. Der Completo <br> Izq Incompleto</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/23_paladar_Suave.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="palsuave"/> 23. Suave</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/27_paladar_BiCompDurSuav.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="bicompdursuav"/> 27. Bilat Completo <br> Duro y Suave</label> </td> </tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/16_paladar_IzqComDerInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqcomderinc"/> 16. Izq Completo <br> Der Incompleto</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/20_paladar_BilInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="bilinc"/> 20. Bilat <br> Incompleto</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/24_paladar_PosDurSua.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="posdursua"/> 24. Posterior <br> duro y suave</label> </td> <td> <a href="#" onClick="yahoowin=dhtmlwindow.open(\'yahoo\', \'iframe\', \'{{STATIC_URL}}DibujarDiagnostico/bin-release/DibujarDiagnostico.html\', \'Dibujar Otro Diagnóstico\', \'width=600px,height=500px,center=1\'); return false;" ><img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/otro.jpg" /></a> </td> <td> <label class="diagn" float> <input type=checkbox name="otropal"/> 28. Otro Paladar</label> </td> </tr> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/17_paladar_DerUniAlvInc.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="derunialvinc"/> 17. Der Unilat <br> Alveolar Incompleto</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/21_paladar_BilCom.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="bilatcom"/> 21. Bilat <br> Completo</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/25_paladar_IzqUniComDurSua.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqunicomdursua"/> 25. Izq Unilateral <br> Completo <br> Duro y Suave</label> </td>  </tr> <tr> <td> <input type=checkbox name="palunirep"/> 29. </td> <td> Paladar Unilat Reparado</td> <td> <input type=checkbox name="palbilrep"/> 30. </td> <td> Paladar Bilat Reparado</td> <td> <input type=checkbox name="insvelfar"/> 31. </td> <td> Insuficiencia Velofaringea</td> </tr> </table> <br /><br /> PROCEDIMIENTO DE REPARACIÓN DE PALADAR: (Circule unicamente el procedimiento que se realiza en esta misión) <br /> <input type="checkbox" name="ningunprocp"/> Ninguno <input type="checkbox" name="revpal"/> Revisión de Paladar <input type="checkbox" name="orticoch"/> Orticochea <input type="checkbox" name="colgfar"/> Colgajo Faringeo <input type="checkbox" name="colgvor"/> Colgajo de Vormer <input type="checkbox" name="otrarepp"/> Otra Reparación <br /> Notas de Evaluación: <input type="text" name="notasdev" size="70" />   </form>');
+				break;
+			case 3:
+				$("#tabul").append('<li id="t'+count+'" class="ntabs">Diagnóstico y Plan Q. 2&nbsp;&nbsp;</li>');
+        		$("#tabcontent").append('<form id="c'+count+'" action="form_action.asp" method="get"> DIAGNÓSTICO DE FíSTULAS <br /> <br /> <table> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/32_fistula_IzqNasLab.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqnaslab"/> 32. Izq. Nasal <br> labial </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/35_fistula_DerNasLab.jpg" /> </td> <td> <input type=checkbox name="dernaslab"/> <label class="diagn"> 35. Der. Nasal <br> labial </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/38_fistula_IzqDerAlv.jpg" /> </td> <td> <input type=checkbox name="izqderalv"/> <label class="diagn"> 38. Izq y Der <br> Alveolar </label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/41_fistula_Dur.jpg" /> </td> <td> <input type=checkbox name="fisdur"/> <label class="diagn"> 41. Duro</label> </tr> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/33_fistula_IzqAlv.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqalv"/> 33. Izq. <br> Alveolar</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/36_fistula_DerAlv.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="deralv"/> 36. Der. <br> Alveolar</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/39_fistula_IzqDerAlvAnt.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqderalvant"/> 39. Izq y Der <br> Alveolar y Anterior</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/42_fistula___DurSua.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="fisdursua"/> 42. Junct de <br> Duro y Suave</label> </td> </tr> <tr> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/34_fistula_IzqAlvAnt.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqalvant"/> 34. Izq alveolar <br> y anterior</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/37_fistula_DerAlvAnt.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="deralvant"/> 37. Der alveolar <br> y anterior</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/40_fistula_IzqDerY____.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="izqderalvantmed"/> 40. Izq y Der<br> Alveolar, anterior <br> y medio</label> </td> <td> <img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/43_fistula_PalSua.jpg" /> </td> <td> <label class="diagn" float> <input type=checkbox name="palsua"/> 43. Paladar<br> suave</label> </td>   </tr> <tr> <td> <a href="#" onClick="yahoowin=dhtmlwindow.open(\'yahoo\', \'iframe\', \'{{STATIC_URL}}DibujarDiagnostico/bin-release/DibujarDiagnostico.html\', \'Dibujar Otro Diagnóstico\', \'width=600px,height=500px,center=1\'); return false"><img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/otro.jpg"/></a> </td> <td><input type=checkbox name="otrafis"/> 44. Otra fístula </td>  </tr> </table> <br /> <br /> PROCEDIMIENTO DE REPARACIÓN DE FISTULA (Circule únicamente el procedimiento que se realizará en esta misión) <br /> <input type="checkbox" name="ningunprocf"/> Ninguno <input type="checkbox" name="repfis"/> Reparación de Fístula <br /> Notas de Evaluación: <input type="text" name="notasdev" size="70" /> <br /><br /><br /> DIAGNÓSTICOS DE NARIZ: <table> <tr> <td> <input type="checkbox" name="deformnasaluniizq"/> 45 Deformación nasal unilateral izquierda &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="deficolum"/> 4  Deficiencia de Columela </td> </tr> <tr> <td> <input type="checkbox" name="deformnasalunider"/> 46 Deformación nasal unilateral derecha &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="desvsept"/> 49  Desviación Septal </td> </tr> <tr> <td> <input type="checkbox" name="deformnasalbilat"/> 47 Deformación nasal bilateral &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="otranar"/> 50 Otra nariz (dibuje) <a href="#" onClick="yahoowin=dhtmlwindow.open(\'yahoo\', \'iframe\', \'{{STATIC_URL}}DibujarDiagnostico/bin-release/DibujarDiagnostico.html\', \'Dibujar Otro Diagnóstico\', \'width=600px,height=500px,center=1\'); return false"><img class="diagn" src="{{STATIC_URL}}Imagenesdiagnostico/otro.jpg"/></a> </td> </tr> </table> <br /><br /> PROCEDIMIENTO DE REPARACIÓN DE NARIZ: Marque unicamente el procedimieto que se realizará en esta misión <br /> <table> <tr> <td> <input type="checkbox" name="ningunarepn"/> Ninguno &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="repdesvsept"/> Reparación de desviación septal </td> </tr> <tr> <td> <input type="checkbox" name="repuninas"/> Reparación unilateral de nariz &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="rinoplast"/> Rinoplastia (Hueso y cartílago)</td> </tr> <tr> <td> <input type="checkbox" name="repbilnas"/> Reparación bilateral de nariz &nbsp;&nbsp;&nbsp; </td> <td> <input type="checkbox" name="otrarepn"/> Otra Reparación de nariz <input type="text" name="otrarepn2" size="30"/></td> </tr> <tr> <td> <input type="checkbox" name="injcart"/> Injerto de Cartílago &nbsp;&nbsp;&nbsp;  </td> </tr></table> Notas de Evaluación: <input type="text" name="notasdev" size="70" /> <br /> </form>');
+				break;
+			case 4:
+				$("#tabul").append('<li id="t'+count+'" class="ntabs"> Diagnóstico y Plan Q. 3&nbsp;&nbsp;</li>');
+       		$("#tabcontent").append('<form id="c'+count+'" action="form_action.asp" method="get">  OTROS DIAGNÓSTICOS:  <br /><br />     <input type=checkbox name="quemadura"/> Contractura por quemadura &nbsp;&nbsp; Localización: <input type="text" name="locquem" size="50" maxlength=50 /><br />       <input type=checkbox name="deformcf"/> Deformidad Craneofacial &nbsp;&nbsp; Explicación : <input type="text" name="expdeform" size="50" maxlength=50 /><br />    <input type=checkbox name="hemang"/> Hemangioma &nbsp;&nbsp; Localización: <input type="text" name="lochemang" size="50" maxlength=50 /><br />      <input type=checkbox name="microtia"/> Microtia/ Oreja en copa &nbsp;&nbsp; Lado: <input type="text" name="loccontrquem" size="50" maxlength=50 /><br />      <input type=checkbox name="nevotumquis"/> Nevo/Tumor/Quiste/Lunar &nbsp;&nbsp; Localización: <input type="text" name="locnevtumq" size="50" maxlength=50 /><br />      <input type=checkbox name="ptosisocu"/> Ptosis Ocular &nbsp;&nbsp; Lado: <input type="text" name="locptosis" size="50" maxlength=50 /><br />      <input type=checkbox name="polidsind"/> Polidactilia/Sindactilia &nbsp;&nbsp; Localización: <input type="text" name="locpolsin" size="50" maxlength=50 /><br />     <input type=checkbox name="cicquemadura"/> Cicatriz por quemadura &nbsp;&nbsp; Localización: <input type="text" name="loccicquem" size="50" maxlength=50 /><br />       <input type=checkbox name="cicatriz"/> Otro tipo de cicatriz &nbsp;&nbsp; Localización: <input type="text" name="loccic" size="50" maxlength=50 /><br />      <input type=checkbox name="frenillo"/> Frenillo &nbsp;&nbsp;  <input type="text" name="frenillo2" size="50" maxlength=50 /><br />   <input type=checkbox name="otrodiag"/> Otro &nbsp;&nbsp;  <input type="text" name="otrodiag2" size="50" maxlength=50 />  <br /><br />   PROCEDIMIENTO PARA ESTA MISIÓN:  <br /><br />     <input type=checkbox name="ninguno"/> Ninguno <br />    <input type=checkbox name="libcontr-injpielc"/> Liberación de contractura + Injerto de piel de espesor completo <br />    <input type=checkbox name="libcontr-injpielp"/> Liberación de contractura + Injerto de piel de espesor parcial <br />     <input type=checkbox name="libcontr-zeto"/> Liberación de contractura con Zetoplastia <br />    <input type=checkbox name="craneofacninguno"/> Craneofacial <br />     <input type=checkbox name="excision-ntql"/> Excisión de Nevo/Tumor/Quiste/Lunar <br />     <input type=checkbox name="frenulectomia"/> Frenulectomía <br />    <input type=checkbox name="exc-hemang"/> Excisión de Hemangioma <br />     <input type=checkbox name="otoplastia"/> Otoplastia <br />     <input type=checkbox name="proc-polid-sind"/> Polidactilia/Sindactilia <br />      <input type=checkbox name="injerto-pielt"/> Injerto de Piel de espesor total <br />    <input type=checkbox name="injerto-pielp"/> Injerto de piel de espesor parcial <br />     <input type=checkbox name="exc-cica-zeto"/> Excisión de cicatriz con zetoplastia <br />     <input type=checkbox name="inj-cica"/> Injección de cicatriz <br />    <input type=checkbox name="otroproc"/> Otro:    <input type="text" name="otroproc2" size="80" maxlength=100 />  <br />   Notas de Evaluación:    <input type="text" name="notaseval" size="90" maxlength=100 /> </form>');
+				break;
+			case 5:
+			     $("#tabul").append('<br><li id="t'+count+'" class="ntabs"> Evaluación Dental &nbsp;&nbsp;</li>');
+				 $("#tabcontent").append('<form id="c'+count+'" action="form_action.asp" method="get">  EVALUACIÓN:  <br /><br />     &nbsp;&nbsp; Dientes Ausentes : <input type="text" name="expdeform" size="40" maxlength=50 /><br />    &nbsp;&nbsp; Diente de la brecha (características): <input type="text" name="lochemang" size="50" maxlength=50 /><br />   &nbsp;&nbsp; Paladar: <input type="text" name="paladar" size="50" maxlength=50 /><br />   &nbsp;&nbsp; Labios: <input type="text" name="labios" size="50" maxlength=50 /><br />  &nbsp;&nbsp; Alvéolo: <input type="text" name="alveolo" size="50" maxlength=50 /><br />  &nbsp;&nbsp; Patología: <input type="text" name="patologia" size="50" maxlength=50 /><br />  &nbsp;&nbsp; Otro: <input type="text" name="otraevdent" size="50" maxlength=50 /><br /> </form> <br /> <br /> <br /><br /> <br /><br /> <br />');
+		}
+		
+        /*$("#tabul").append('<li id="t'+count+'" class="ntabs">Tab '+count+'&nbsp;&nbsp;'+closetab+'</li>');
+        $("#tabcontent").append('<p id="c'+count+'">Tab Content '+count+'</p>');*/
+
+		$("#tabul li").removeClass("ctab");
+        $("#t"+1).addClass("ctab");
+        $("#tabcontent p").hide();
+		$("#tabcontent form").hide();
+        $("#c"+1).fadeIn('slow');
+
+        $("#t"+count).bind("click", function() {
+            $("#tabul li").removeClass("ctab");
+            $("#t"+count).addClass("ctab");
+            $("#tabcontent p").hide();
+			$("#tabcontent form").hide();
+            $("#c"+count).fadeIn('slow');
+			$('#example').tabs({
+    			load: function(event, ui) {
+        			$(ui.panel).delegate('a', 'click', function(event) {
+            			$(ui.panel).load(this.href);
+            			event.preventDefault();
+        			});
+    			}
+			});
+        });
+
+        /*$("#close"+count).bind("click", function() {
+            // activate the previous tab
+            $("#tabul li").removeClass("ctab");
+            $("#tabcontent p").hide();
+            $(this).parent().prev().addClass("ctab");
+            $("#c"+count).prev().fadeIn('slow');
+
+            $(this).parent().remove();
+            $("#c"+count).remove();
+            return false;
+        });*/
+    }
+});
+
+
+</script>
+
+<script type="text/javascript">
+
+function validateEval1()
+{
+var historia_codigo=document.forms["eval1"]["exp"].value;
+var tlf=document.forms["eval1"]["tlf"].value;
+var cel=document.forms["eval1"]["cel"].value;
+var mes=document.forms["eval1"]["mes"].value;
+var dia=document.forms["eval1"]["dia"].value;
+var anyo=document.forms["eval1"]["anyo"].value;
+var vivos=document.forms["eval1"]["vivos"].value;
+var muertos=document.forms["eval1"]["muertos"].value;
+var edad=document.forms["eval1"]["edad"].value;
+var medic=document.forms["eval1"]["medic"].value;
+var medicamento=document.forms["eval1"]["medicamento"].value;
+var vacunas=document.forms["eval1"]["vacunao"].value;
+var alergias=document.forms["eval1"]["alergiao"].value;
+var embarazos=document.forms["eval1"]["embarazoperd"].value;
+var infecciones=document.forms["eval1"]["infecciono"].value;
+var cnss=document.forms["eval1"]["cnso"].value;
+var lungss=document.forms["eval1"]["lungso"].value;
+var corazons=document.forms["eval1"]["corazono"].value;
+
+for (var i=0; i < document.eval1.medic.length; i++)
+   {
+   if (document.eval1.medic[i].checked)
+      {
+	        var medic = document.eval1.medic[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.vacuna.length; i++)
+   {
+   if (document.eval1.vacuna[i].checked)
+      {
+	        var vacuna = document.eval1.vacuna[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.alergia.length; i++)
+   {
+   if (document.eval1.alergia[i].checked)
+      {
+	        var alergia = document.eval1.alergia[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.embarazo.length; i++)
+   {
+   if (document.eval1.embarazo[i].checked)
+      {
+	        var embarazo = document.eval1.embarazo[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.infeccion.length; i++)
+   {
+   if (document.eval1.infeccion[i].checked)
+      {
+	        var infeccion = document.eval1.infeccion[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.cns.length; i++)
+   {
+   if (document.eval1.cns[i].checked)
+      {
+	        var cns = document.eval1.cns[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.lungs.length; i++)
+   {
+   if (document.eval1.lungs[i].checked)
+      {
+	        var lungs = document.eval1.lungs[i].value;
+      }
+   }
+   
+for (var i=0; i < document.eval1.corazon.length; i++)
+   {
+   if (document.eval1.corazon[i].checked)
+      {
+	        var corazon = document.eval1.corazon[i].value;
+      }
+   }
+
+
+if(historia_codigo.search(/^\S+$/)==-1 ){
+
+	alert("El codigo de historia es invalido");
+	return false;
+
+}
+
+if(tlf.search(/^[0-9]{8,12}$/)==-1 && (tlf!="" || tlf!=null)){
+
+	alert("Introduzca un numero de teléfono válido");
+	return false;
+
+}
+
+
+
+if(cel.search(/^[0-9]{8,12}$/)==-1 && (cel!="" || cel!=null)){
+
+	alert("Introduzca un numero de celular válido");
+	return false;
+
+}
+
+if(mes.search(/[0-9]{1,2}/)==-1){
+
+	alert("Campo mes sólo admite valores numericos");
+	return false;
+
+}
+
+else if(mes<1 || mes > 12 ){
+	
+	alert("Introduzca un mes válido");
+	return false;
+}
+
+if(dia.search(/[0-9]{1,2}/)==-1){
+
+	alert("Campo dia sólo admite valores numericos");
+	return false;
+
+}
+
+else if(dia <1 || dia > 31){
+	
+	alert("Introduzca una fecha válida!");
+	return false;
+	
+}
+
+if(mes==2 || mes==4 || mes==6 || mes==9 || mes ==11){
+
+	if(mes==02 || mes==2){
+		
+		if(dia <1 || dia > 28){
+		
+			alert("Inserte una fecha válida, febrero no posee ese dia");
+			return false;
+		
+		}
+	}
+	else {
+	
+		if(dia <1 || dia > 30){
+		
+			alert("Inserte una fecha válida!");
+			return false;
+		
+		}
+	
+	}
+
+}
+
+if(anyo < 1900 || anyo > 2100){
+
+	alert("Inserte un año válido");
+	return false;
+
+}
+
+if(edad.search(/^[0-9]{0,2}$/)==-1 && (edad!="" || edad!=null)){ 
+
+	alert("Discupe, el campo edad admite sólo números");
+	return false;
+	
+}
+
+if(vivos.search(/^[0-9]{0,2}$/)==-1 && (vivos!="" || vivos!=null)){
+
+	alert("El campo hermanos vivos admite sólo números");
+	return false;
+
+}
+if(muertos.search(/^[0-9]{0,2}$/)==-1 && (muertos!="" || muertos!=null) ){
+
+	alert("El campo hermanos muertos admite sólo números");
+	return false;
+
+}
+
+if(medic=="Otro" && (medicamento=="" || medicamento==null)){
+
+	alert("Si selecciona otro, debe ingresar un medicamento");
+	return false;
+
+}
+
+if(vacuna=="Otro" && (vacunas=="" || vacunas==null)){
+
+	alert("Si selecciona otro, debe ingresar una vacuna");
+	return false;
+
+}
+
+if(alergia=="Otro" && (alergias=="" || alergias==null)){
+
+	alert("Si selecciona otro, debe ingresar una alergia");
+	return false;
+
+}
+
+if(embarazo=="perdido" && (embarazos=="" || embarazos==null)){
+
+	alert("Si selecciona perdida, debe indicar causa de pérdida de embarazo");
+	return false;
+
+}
+
+if(infeccion=="Otro" && (infecciones=="" || infecciones==null)){
+
+	alert("Si selecciona otro, debe ingresar una infección");
+	return false;
+
+}
+
+if(cns=="Otro" && (cnss=="" || cnss==null)){
+
+	alert("Si selecciona otro, debe ingresar un cns");
+	return false;
+
+}
+
+if(lungs=="Otro" && (lungss=="" || lungss==null)){
+
+	alert("Si selecciona otro, debe ingresar uno en el campo lungs");
+	return false;
+
+}
+
+if(corazon=="Otro" && (corazons=="" || corazons==null)){
+
+	alert("Si selecciona otro, debe ingresar una enfermedad en el campo corazon");
+	return false;
+
+}
+
+}
+
+</script>
+
+
+</head>
+<body>
+
+<div id="modalinfodiv" style="display:none;">
+<div id="datospac">
+<h4>Ingrese los datos principales</h4>
+<form id="myform">
+  <fieldset>
+  <p>Nombre: <input id="nombrep" type="text" name="nombrep" size="20" />
+  <label id="histn" for="histn">Historia: &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</label>
+  <input type="text" name="histn" size="20" /> <br><br><br>
+  Jornada: <input id="jorn" type="text" name="jorn" size="20" />
+  <label id="nombrerep" for="histn">Representante:</label><input type="text" name="nombrerep" size="20" /> <br>
+  </p>
+  <br /> <br />
+  <input id="okbutton" type="button" value="Aceptar" name="B1" onClick="process_info('yes')" /> <input id="denybutton" type="button" value="Cancelar" onClick="process_info('no')" />
+  </fieldset>
+</form>
+</div>
+</div>
+
+<div id="background">
+  <div id="logo">
+  </div>
+  <div id="barra">
+  </div>
+<div id="smoothmenu1" class="ddsmoothmenu">
+<ul>
+<li><a href="#">Historia</a>
+  <ul>
+  <li><a href="/sistema/crearHistoria">Crear Historia</a>
+  </li>
+  <li><a href="#">Modificar Historia</a></li>
+  <li><a href="/sistema/historia">Consultar Historia</a></li>
+  </ul>
+</li>
+<li><a href="#">Reportes</a>
+  <ul>
+  <li><a href="#">Generar Reportes</a></li>
+  <li><a href="#">Sub Item 1.2</a></li>
+  <li><a href="#">Sub Item 1.3</a></li>
+  </ul>
+</li>
+<li><a href="#">Jornadas</a>
+  <ul>
+  <li><a href="/sistema/crearJornada">Crear Jornadas</a></li>
+  <li><a href="/sistema/jornada"     >Consultar Jornadas</a></li>
+  </ul>
+</li>
+<li><a href="/sistema/opciones">Opciones</a></li>
+<li><a href="#">Ayuda</a></li>
+</ul>
+<br style="clear: left" />
+</div>
+  <ul id="tabul">
+  </ul>
+  <div id="tabcontent" >
+        {% if mensaje %}
+            <span class="mensaje_alerta"> {{mensaje}}</span>
+        {% endif %}
+   </div>
+<div id="smoothmenu2" class="ddsmoothmenu-v" style="display:none;">
+<ul>
+<li><a href="#">Mostrar PDFs</a>
+</li>
+<li><a href="#">Otra Opción 2</a></li>
+</ul>
+<br style="clear: left" />
+</div>
+<br />
+<br />
+</div>
+</body>
+</html>
