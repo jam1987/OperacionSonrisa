@@ -163,6 +163,15 @@ input.cb {
 
 }
 
+#form-acompanante {
+
+	border-width: .1em;
+	width: 650px;
+	border-style:solid;
+	border-color:#000033;
+
+}
+
 #menuhist {
 
 	width: 353px;

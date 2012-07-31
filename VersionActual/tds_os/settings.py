@@ -49,7 +49,7 @@ USE_L10N = True
 
 # Absolute filesystem path to the directory that will hold user-uploaded files.
 # Example: "/home/media/media.lawrence.com/media/"
-MEDIA_ROOT = '/home/biomecanica/Operacion_Sonrisa/tds_os/media'
+MEDIA_ROOT = '/home/biomecanica/Dropbox/OperationSmileSystem/OperacionSonrisa/VersionActual/tds_os/media'
 
 # URL that handles the media served from MEDIA_ROOT. Make sure to use a
 # trailing slash.
@@ -60,7 +60,7 @@ MEDIA_URL = '/media/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/home/biomecanica/Operacion_Sonrisa/tds_os/'
+STATIC_ROOT = '/home/biomecanica/Dropbox/OperationSmileSystem/OperacionSonrisa/VersionActual/tds_os/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -111,7 +111,7 @@ TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
     # Always use forward slashes, even on Windows.
     # Don't forget to use absolute paths, not relative paths.
-    '/home/biomecanica/Operacion_Sonrisa/tds_os/templates'
+    '/home/biomecanica/Dropbox/OperationSmileSystem/OperacionSonrisa/VersionActual/tds_os/templates'
 )
 
 INSTALLED_APPS = (
