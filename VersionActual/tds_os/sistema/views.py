@@ -33,7 +33,7 @@ def crearHistoria(request):
                     	edad             = request.POST["edad"],
                     	genero          = request.POST["sexo"],
                     	direccion       = request.POST["dir"],
-                    	)
+			pais            = request.POST["pais"])
                 p.save()
                 j=Jornada.objects.get(codigo=codigo_jornada)
                 asiste=Asiste.objects.create(
